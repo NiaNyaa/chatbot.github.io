@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chat GPT</title>
+  <style>
+    body {
+      background-color: #333;
+      color: #fff;
+    }
+
+    #chat-container {
+      position: relative;
+      height: 500px;
+    }
+
+    #chatbox {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      right: 10px;
+      bottom: 50px;
+      border: 1px solid #ccc;
+      background-color: #222;
+      overflow-y: scroll;
+      padding: 10px;
+    }
+
+    #input {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      width: calc(100% - 120px);
+      height: 30px;
+      font-size: 16px;
+    }
+
+    #send-button {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="chat-container">
+    <div id="chatbox"></div>
+    <input type="text" id="input" onkeypress="handleKeyPress(event)">
+    <button onclick="sendMessage()" id="send-button">Kirim</button>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "halo",
+        response: "Halo! Ada yang bisa saya bantu?"
+      },
+      {
+        question: "siapa namamu",
+        response: "Saya adalah ChatBot AI."
+      },
+      {
+        question: "apa kabar",
+        response: "Saya hanya bot, jadi tidak memiliki perasaan. Tapi terima kasih sudah bertanya!"
+      },
+      {
+        question: "mau jadi pacarku?",
+        response: "Cah gendeng"
+      }
+    ];
+
+    function handleKeyPress(event) {
+      if (event.keyCode === 13) {
+        event.preventDefault();
+        sendMessage();
+      }
+    }
+
+    function sendMessage() {
+      var message = document.getElementById("input").value;
+      appendMessage("Anda: " + message);
+      document.getElementById("input").value = "";
+
+      var response = getResponse(message);
+      appendMessage("Bot: " + response);
+      scrollChatToBottom();
+    }
+
+    function appendMessage(message) {
+      var chatbox = document.getElementById("chatbox");
+      var messageNode = document.createElement("p");
+      var messageText = document.createTextNode(message);
+      messageNode.appendChild(messageText);
+      chatbox.appendChild(messageNode);
+    }
+
+    function scrollChatToBottom() {
+      var chatbox = document.getElementById("chatbox");
+      chatbox.scrollTop = chatbox.scrollHeight;
+    }
+
+    function getResponse(question) {
+      for (var i = 0; i < questions.length; i++) {
+        if (questions[i].question.toLowerCase() === question.toLowerCase()) {
+          return questions[i].response;
+        }
+      }
+      return "Maaf, saya tidak dapat memahami pertanyaan Anda.";
+    }
+  </script>
+</body>
+</html>
