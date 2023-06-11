@@ -200,6 +200,10 @@
     }
 
     function getResponse(question) {
+      if (question === "") {
+        return "Silakan masukkan pertanyaan Anda.";
+      }
+
       var bebas = getBebasFromQuestion(question);
       if (bebas !== "") {
         var randomLama = getRandomLama();
@@ -269,6 +273,7 @@
     window.addEventListener("DOMContentLoaded", function() {
       populateQuestionList();
       openTab(event, 'chat'); // Untuk memastikan tab "Chat" aktif saat pertama kali membuka situs web
+      appendMessage("Bot: Selamat datang! Silakan ajukan pertanyaan Anda.");
     });
   </script>
 </body>
