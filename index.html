@@ -113,7 +113,7 @@
       <button class="tablink active" onclick="openTab(event, 'chat')">Tab Chat</button>
       <button class="tablink" onclick="openTab(event, 'questions')">Tab Pertanyaan</button>
     </div>
-  
+
     <div id="chat" class="tabcontent" style="display: block;">
       <div id="chatbox"></div>
       <div id="input-container">
@@ -121,22 +121,26 @@
         <button onclick="sendMessage()" id="send-button">Kirim</button>
       </div>
     </div>
-  
+
     <div id="questions" class="tabcontent">
       <h2>Daftar Pertanyaan</h2>
       <ul id="question-list"></ul>
     </div>
   </div>
-  
+
   <script>
     const questions = [
       {
         question: "halo",
-        response: "Halo! Ada yang bisa saya bantu?"
+        response: "Halo juga!"
+      },
+      {
+        question: "hai",
+        response: "Hai juga!"
       },
       {
         question: "siapa namamu",
-        response: "Saya adalah ChatBot AI."
+        response: "Saya adalah ChatBot."
       },
       {
         question: "apa kabar",
@@ -144,9 +148,11 @@
       },
       {
         question: "mau jadi pacarku",
-        response: "maaf saya hanya sebuah chatbot yang tidak memiliki perasaaan untuk menjalani hubungan"
+        response: "Maaf, saya hanya sebuah chatbot yang tidak memiliki perasaan untuk menjalani hubungan."
       }
     ];
+
+    const lama = ['detik', 'menit', 'jam', 'hari', 'bulan', 'tahun', 'abad'];
 
     function handleKeyPress(event) {
       if (event.keyCode === 13) {
@@ -179,12 +185,32 @@
     }
 
     function getResponse(question) {
+      var bebas = getBebasFromQuestion(question);
+      if (bebas !== "") {
+        var randomLama = getRandomLama();
+        var randomValue = Math.floor(Math.random() * 100) + 1; // Generate random number from 1 to 100
+        return `Berdasarkan perhitungan acak, kapan ${bebas} adalah ${randomValue} ${randomLama} lagi .`;
+      }
+
       for (var i = 0; i < questions.length; i++) {
         if (questions[i].question.toLowerCase() === question.toLowerCase()) {
           return questions[i].response;
         }
       }
       return "Maaf, saya tidak dapat memahami pertanyaan Anda.";
+    }
+
+    function getBebasFromQuestion(question) {
+      var questionArray = question.split("kapan ");
+      if (questionArray.length > 1) {
+        return questionArray[1];
+      }
+      return "";
+    }
+
+    function getRandomLama() {
+      var randomIndex = Math.floor(Math.random() * lama.length);
+      return lama[randomIndex];
     }
 
     function openTab(evt, tabName) {
