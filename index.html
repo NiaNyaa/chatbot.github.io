@@ -1,43 +1,70 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Chat GPT</title>
+  <title>Chat BOT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       background-color: #333;
       color: #fff;
+      margin: 0;
+      padding: 0;
     }
-
+  
     #chat-container {
       position: relative;
-      height: 500px;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
     }
-
+  
+    #tabs {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+  
+    .tablink {
+      background-color: #555;
+      color: white;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 10px 20px;
+      font-size: 16px;
+      width: 50%;
+    }
+  
+    .tablink.active {
+      background-color: #4CAF50;
+    }
+  
     #chatbox {
-      position: absolute;
-      left: 10px;
-      top: 10px;
-      right: 10px;
-      bottom: 50px;
+      flex: 1;
       border: 1px solid #ccc;
       background-color: #222;
       overflow-y: scroll;
       padding: 10px;
+      font-size: 16px;
+      margin-bottom: 10px;
+      max-height: 70vh;
     }
-
+  
+    #input-container {
+      display: flex;
+      align-items: flex-end;
+      margin-top: 10px;
+    }
+  
     #input {
-      position: absolute;
-      bottom: 10px;
-      left: 10px;
-      width: calc(100% - 120px);
       height: 30px;
       font-size: 16px;
+      flex: 1;
+      margin-right: 10px;
     }
-
+  
     #send-button {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
       background-color: #4CAF50;
       color: #fff;
       padding: 10px 20px;
@@ -45,15 +72,62 @@
       font-size: 16px;
       cursor: pointer;
     }
+  
+    /* Aturan CSS untuk tampilan di perangkat seluler */
+    @media (max-width: 480px) {
+      #chat-container {
+        padding: 5px;
+      }
+      #tabs {
+        flex-wrap: wrap;
+      }
+      .tablink {
+        width: 100%;
+        margin-bottom: 5px;
+      }
+      #chatbox {
+        font-size: 14px;
+        max-height: 60vh;
+      }
+      #input-container {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      #input {
+        width: 100%;
+        margin-right: 0;
+        margin-top: 10px;
+        font-size: 18px;
+        height: 40px;
+      }
+      #send-button {
+        width: 100%;
+        margin-top: 10px;
+      }
+    }
   </style>
 </head>
 <body>
   <div id="chat-container">
-    <div id="chatbox"></div>
-    <input type="text" id="input" onkeypress="handleKeyPress(event)">
-    <button onclick="sendMessage()" id="send-button">Kirim</button>
+    <div id="tabs">
+      <button class="tablink active" onclick="openTab(event, 'chat')">Tab Chat</button>
+      <button class="tablink" onclick="openTab(event, 'questions')">Tab Pertanyaan</button>
+    </div>
+  
+    <div id="chat" class="tabcontent" style="display: block;">
+      <div id="chatbox"></div>
+      <div id="input-container">
+        <input type="text" id="input" onkeypress="handleKeyPress(event)">
+        <button onclick="sendMessage()" id="send-button">Kirim</button>
+      </div>
+    </div>
+  
+    <div id="questions" class="tabcontent">
+      <h2>Daftar Pertanyaan</h2>
+      <ul id="question-list"></ul>
+    </div>
   </div>
-
+  
   <script>
     const questions = [
       {
@@ -69,7 +143,7 @@
         response: "Saya hanya bot, jadi tidak memiliki perasaan. Tapi terima kasih sudah bertanya!"
       },
       {
-        question: "mau jadi pacarku?",
+        question: "mau jadi pacarku",
         response: "Cah gendeng"
       }
     ];
@@ -112,6 +186,39 @@
       }
       return "Maaf, saya tidak dapat memahami pertanyaan Anda.";
     }
+
+    function openTab(evt, tabName) {
+      var i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+      tablinks = document.getElementsByClassName("tablink");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+      document.getElementById(tabName).style.display = "block";
+      evt.currentTarget.className += " active";
+
+      if (tabName === 'questions') {
+        populateQuestionList();
+      }
+    }
+
+    function populateQuestionList() {
+      var questionList = document.getElementById("question-list");
+      questionList.innerHTML = ""; // Menghapus konten sebelumnya
+      for (var i = 0; i < questions.length; i++) {
+        var questionItem = document.createElement("li");
+        questionItem.textContent = questions[i].question;
+        questionList.appendChild(questionItem);
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", function() {
+      populateQuestionList();
+      openTab(event, 'chat'); // Untuk memastikan tab "Chat" aktif saat pertama kali membuka situs web
+    });
   </script>
 </body>
 </html>
