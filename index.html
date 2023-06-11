@@ -149,7 +149,22 @@
       {
         question: "mau jadi pacarku",
         response: "Maaf, saya hanya sebuah chatbot yang tidak memiliki perasaan untuk menjalani hubungan."
+      },
+      {
+        question: 'kapan {bebas}'
+      },
+      {
+        question: 'kamu lagi apa {akan dijawab random}'
       }
+    ];
+
+    const activities = [
+      "lagi tidur",
+      "lagi mandi",
+      "lagi makan",
+      "lagi belajar",
+      "lagi bekerja",
+      "lagi nonton TV"
     ];
 
     const lama = ['detik', 'menit', 'jam', 'hari', 'bulan', 'tahun', 'abad'];
@@ -189,7 +204,12 @@
       if (bebas !== "") {
         var randomLama = getRandomLama();
         var randomValue = Math.floor(Math.random() * 100) + 1; // Generate random number from 1 to 100
-        return `Berdasarkan perhitungan acak, kapan ${bebas} adalah ${randomValue} ${randomLama} lagi .`;
+        return `${randomValue} ${randomLama} lagi.`;
+        // ${bebas}
+      }
+
+      if (question.toLowerCase() === "kamu lagi apa") {
+        return getRandomActivity();
       }
 
       for (var i = 0; i < questions.length; i++) {
@@ -206,6 +226,11 @@
         return questionArray[1];
       }
       return "";
+    }
+
+    function getRandomActivity() {
+      var randomIndex = Math.floor(Math.random() * activities.length);
+      return activities[randomIndex];
     }
 
     function getRandomLama() {
